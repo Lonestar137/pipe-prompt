@@ -1,5 +1,12 @@
 # TODO
 
+## Features
+
+- arg to add a indent char to all entries
+- arg to add a color to all entries that match regex
+- arg to add a cmd to execute on all entries.
+- print list of current results on screen.
+
 ## Testing
 
 - Unit testing
