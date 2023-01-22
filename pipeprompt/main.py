@@ -15,13 +15,17 @@ def main():
 
         std_input: str = ""
         if args.debug:
-            # std_input: str = "hello_world@#color: testing command #@"
-            std_input: str = "hello_world@#cmd: testing command #@"
             # std_input: str = "hello_world"
+            # std_input: str = "hello_world@#cmd: testing command #@"
+            # std_input: str = "hello_world@#cmd: testing command {row_data}#@"
+            std_input: str = "hello_world@#cmd: testing command {row_data}#@ @#color: RED#@"
         else:
             std_input: str = standard_core.collect_pipe_input()
 
         rows: List[Row] = standard_core.entry_point(std_input, args)
+        print(rows[0].row_data)
+        print(rows[0].cmd)
+        print(rows[0].color)
 
     except KeyboardInterrupt:
         print("Process closed due to keyboard interrupt.")
