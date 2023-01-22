@@ -20,15 +20,14 @@ def parse_standard_data(raw_data: str, str_delimiter_regex: str="@#[a-z]{3,6}:.+
 def get_new_row(collected_fields: List[Row], row: str, delimiter: Pattern)->Row:
     matched_text = delimiter.search(row)
     if not matched_text:
-        new_row: Row = map_raw_data_to_row_class(row, collected_fields)
-        return new_row
+        return map_raw_data_to_row_class(row, collected_fields)
     else:
         matched_text = matched_text.group()
         fields_from_match: List[str] = matched_text.split(delimiter.pattern[2:])
         new_field_appended: List[str] = collected_fields + fields_from_match
         row_with_field_removed: str = row.replace(matched_text, "")
 
-        get_new_row(new_field_appended, row_with_field_removed, delimiter)
+        return get_new_row(new_field_appended, row_with_field_removed, delimiter)
 
 def map_raw_data_to_row_class(row_data: str, special_fields_in_row: List[str])->Row:
     kwargs = ROW_KWARGS
@@ -36,20 +35,19 @@ def map_raw_data_to_row_class(row_data: str, special_fields_in_row: List[str])->
     for special_field in special_fields_in_row:
         tag = extract_tag_from_special_field(special_field)
         value = extract_value_from_special_field(special_field)
-        if tag in kwargs.keys:
+        if tag in kwargs.keys():
             kwargs[tag]=value
-    
     return Row(**kwargs)
 
 # @param field:  "tag: value #@"
 # @return tag
 def extract_tag_from_special_field(field: str)-> str:
-    return field.split(':')[0]
+    return field.split(':')[0][2:]
 
 #@param field: "tag: value #@"
 #@return  value 
 def extract_value_from_special_field(field: str)-> str:
-    return field.split(':')[1][:-2]
+    return field.split(':')[1][:-2].strip()
 
 def remove_nulls(rows: List[Row])->List[Row]:
     filtered_rows: List[Row] = list(filter(None, rows))
