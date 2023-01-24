@@ -24,6 +24,10 @@ def entry_point(rows: List[Row]):
 def event_loop(menu: BaseMenu, key: str):
     if key == '/':
         menu.search()
+    elif key == 'j':
+        menu.down()
+    elif key == 'k':
+        menu.up()
 
 
 

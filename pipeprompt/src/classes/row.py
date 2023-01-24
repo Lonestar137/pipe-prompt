@@ -12,6 +12,8 @@ class Row:
         self.color: str = color
         self.cmd: str = cmd
         self.indent: str = indent
+
+        self.show = True
     
 
 # This is used as a constructor for row data at parse time.
