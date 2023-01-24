@@ -1,6 +1,7 @@
 # About
 
-lorem ipsum
+pipe-prompt is a CLI tool that spawns and interactive menu from std input.  This means you can pass the contents of a file or a command into this utility and parse the output interactively.  Additionally, you can place delimited fields to change the behavior 
+of the menu.  For exampl, you can add `@#cmd: ls -la {row_data} #@` to any line of standard input to run the `ls -la` command and all other text on that line will be passed as an argument to the command.
 
 ## Requirements
 
@@ -9,7 +10,7 @@ lorem ipsum
 ## How to
 
 1. To use pipe-prompt simply use the pipe character '|' after a command which outputs standard text, i.e.  cat somefile.txt or echo "hello world" | pipe-prompt.  
-2. Enable vim keybinds: `gcmdr -v` or `gcmdr --vim`
+2. To enable vim keybinds: `-v` or `--vim`
 
 ## Known issues
 
