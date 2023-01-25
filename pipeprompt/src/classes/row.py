@@ -15,6 +15,3 @@ class Row:
 
         self.show = True
     
-
-# This is used as a constructor for row data at parse time.
-ROW_KWARGS = {"row_data": "", "color": "", "cmd": "", "indent": ""}

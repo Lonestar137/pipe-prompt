@@ -11,6 +11,9 @@ class HelperFunctions:
         else:
             return self.height/2
 
+    def get_current_selected_item_index(self):
+        return self.content[int(self.menu_midpoint)+1]
+
 class CurseFunctions:
 
     def enable_cursor(self):
@@ -23,15 +26,19 @@ class CurseFunctions:
         if width > curses.COLS:
             width = curses.COLS
         
-        stdscr.addstr(height, width, text, self.underline | curse_style)
+        stdscr.addstr(height, width, text, self.underline | curse_style | curses.color_pair(1))
 class MenuFunctions(CurseFunctions, HelperFunctions):
     def down(self):
         first_element = self.content.pop(0)
         self.content.insert(-1, first_element)
 
+        self.current_selected_item: int = self.get_current_selected_item_index()
+
     def up(self):
         last_element = self.content.pop(-1)
         self.content.insert(0, last_element)
+
+        self.current_selected_item: int = self.get_current_selected_item_index()
 
     def execute():
         pass
@@ -47,16 +54,14 @@ class MenuFunctions(CurseFunctions, HelperFunctions):
             starting_text_line = self.content_menu_line + i
             middle_of_menu: bool = (int(self.midpoint+1) == i)
 
-            try:
-                if not_out_of_bounds:
-                    if middle_of_menu:
-                        self.stdscr.addstr(starting_text_line, self.base_x, f"{indent_padding}{row.indent}{row.row_data[:self.width-15]}", curses.A_STANDOUT)
-                    else:
-                        self.stdscr.addstr(starting_text_line, self.base_x, f"{indent_padding}{row.indent}{row.row_data[:self.width-15]}")
-            except:
-                curses.endwin()
-                import pdb
-                pdb.set_trace()
+
+            if not_out_of_bounds:
+                if middle_of_menu:
+                    # self.show_selected_item_cmd(row.cmd)
+                    self.stdscr.addstr(starting_text_line, self.base_x, f"{indent_padding}{row.indent}{row.row_data[:self.width-15]}", curses.A_STANDOUT)
+                    self.highlight_line(self.stdscr, curses.A_UNDERLINE, self.search_bar_line, self.search_bar_width, f"CMD: {row.cmd}")
+                else:
+                    self.stdscr.addstr(starting_text_line, self.base_x, f"{indent_padding}{row.indent}{row.row_data[:self.width-15]}")
 
 
             if i < self.midpoint and self.padding:
@@ -66,6 +71,10 @@ class MenuFunctions(CurseFunctions, HelperFunctions):
 
 
         self.stdscr.refresh()
+
+    def show_selected_item_cmd(self, item: Row):
+        self.highlight_line(self.stdscr, curses.A_ITALIC, self.search_bar_line, self.search_bar_width, f"CMD: {item.cmd}")
+
     
     def search(self):
         self.refresh_menu()
@@ -122,6 +131,7 @@ class BaseMenu(MenuFunctions):
         self.search_bar_width = 0 + self.base_x
         self.search_bar_line = 2 + self.base_y
         self.content_menu_line = self.search_bar_line + 1
+        self.current_selected_item = self.get_current_selected_item_index()
         
         # Options
         self.padding = True
