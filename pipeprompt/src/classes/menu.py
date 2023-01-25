@@ -26,7 +26,10 @@ class CurseFunctions:
         if width > curses.COLS:
             width = curses.COLS
         
+        stdscr.move(height, width)
+        stdscr.clrtoeol()
         stdscr.addstr(height, width, text, self.underline | curse_style | curses.color_pair(1))
+
 class MenuFunctions(CurseFunctions, HelperFunctions):
     def down(self):
         first_element = self.content.pop(0)
