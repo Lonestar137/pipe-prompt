@@ -1,6 +1,6 @@
 from re import Pattern
 import re
-from pipeprompt.src.classes.row import Row, ROW_KWARGS
+from pipeprompt.src.classes.row import Row
 from typing import List, Tuple
 
 #  Default Regex:   @#[a-z]{3,6}:.+#@
@@ -21,7 +21,7 @@ def get_new_row(collected_fields: List[Row], row: str, delimiter: Pattern)->Row:
     if not search_text:
         return map_raw_data_to_row_class(row, collected_fields)
     else:
-        matched_text = search_text.group()
+        matched_text: str = search_text.group()
         fields_from_match: List[str] = matched_text.split(delimiter.pattern[2:])
         new_field_appended: List[str] = collected_fields + fields_from_match
         row_with_field_removed: str = row.replace(matched_text, "")
@@ -29,7 +29,7 @@ def get_new_row(collected_fields: List[Row], row: str, delimiter: Pattern)->Row:
         return get_new_row(new_field_appended, row_with_field_removed, delimiter)
 
 def map_raw_data_to_row_class(row_data: str, special_fields_in_row: List[str])->Row:
-    kwargs = ROW_KWARGS
+    kwargs = {"row_data": "", "color": "", "cmd": "", "indent": ""}
     kwargs["row_data"] = row_data
     for special_field in special_fields_in_row:
         tag = extract_tag_from_special_field(special_field)

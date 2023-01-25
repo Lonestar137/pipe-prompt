@@ -12,7 +12,6 @@ class Row:
         self.color: str = color
         self.cmd: str = cmd
         self.indent: str = indent
-    
 
-# This is used as a constructor for row data at parse time.
-ROW_KWARGS = {"row_data": "", "color": "", "cmd": "", "indent": ""}
+        self.show = True
+    
